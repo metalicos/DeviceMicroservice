@@ -1,0 +1,86 @@
+server:
+  port: 5555
+
+spring:
+  application:
+    name: cyber-done-device-microservice
+  profiles:
+    active: dev
+
+  datasource:
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/device-microservice-db
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+  jooq:
+    sql-dialect: org.hibernate.dialect.MySQLInnoDBDialect
+
+mqtt:
+  username: user
+  password: Qwerty123
+  clean-session: false
+  connection-timeout: 10
+  auto-reconnect: true
+  max-in-flight-messages: 100
+  client:
+    name: CyberDoneDeviceMicroservice
+    url: tcp://192.168.1.100:1883
+    quality-of-service: 2
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+mqtt:
+  username: user
+  password: Qwerty123
+  clean-session: true
+  connection-timeout: 60
+  auto-reconnect: true
+  max-in-flight-messages: 100
+  client:
+    name: HydroPonicMicroserviceApp
+    url: tcp://192.168.1.100:1883
+    quality-of-service: 2
+
+---
+spring:
+  config:
+    activate:
+      on-profile: stg
+mqtt:
+  username: user
+  password: Qwerty123
+  clean-session: true
+  connection-timeout: 60
+  auto-reconnect: true
+  max-in-flight-messages: 100
+  client:
+    name: HydroPonicMicroserviceApp
+    url: tcp://192.168.1.100:1883
+    quality-of-service: 2
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+mqtt:
+  username: user
+  password: Qwerty123
+  clean-session: true
+  connection-timeout: 60
+  auto-reconnect: true
+  max-in-flight-messages: 100
+  client:
+    name: HydroPonicMicroserviceApp
+    url: tcp://192.168.1.100:1883
+    quality-of-service: 2
