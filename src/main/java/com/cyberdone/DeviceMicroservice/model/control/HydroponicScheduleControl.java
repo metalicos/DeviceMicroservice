@@ -20,6 +20,7 @@ public class HydroponicScheduleControl implements ScheduleControllable {
             case "phDownStart" -> operationService.startPhDownPump(uuid, data, type);
             case "phDownStop" -> operationService.stopPhDownPump(uuid);
             case "fertilizerStart" -> operationService.startFertilizerPump(uuid, data, type);
+            case "fertilizerStop" -> operationService.stopFertilizerPump(uuid);
             case "calibrateTds" -> operationService.calibrateTdsSensor(uuid, data, type);
             case "calibrateTdsClear" -> operationService.clearCalibrationOfTdsSensor(uuid);
             case "calibratePhLow" -> operationService.calibratePhSensorLowPoint(uuid, data, type);
