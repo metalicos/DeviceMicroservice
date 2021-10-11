@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +28,10 @@ public class HydroponicSettingsDto {
     private Long restartCounter;
     private String wifiSSID;
     private String wifiPASS;
-    private Date microcontrollerTime;
+    private Boolean isDosatorPhUpOpen;
+    private Boolean isDosatorPhDownOpen;
+    private Boolean isDosatorTdsOpen;
+    private Boolean autotime;
+    private String timeZone;
+    private LocalDateTime microcontrollerTime;
 }

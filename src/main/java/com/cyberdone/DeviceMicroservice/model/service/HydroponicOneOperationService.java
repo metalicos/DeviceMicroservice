@@ -100,11 +100,19 @@ public class HydroponicOneOperationService extends AbstractCyberdoneOperationSer
         sendEncodedData(uuid, "sensorsEnable", makeEnable, type);
     }
 
-    public void updateDosatorsEnable(String uuid, String makeEnable, ValueType type) {
-        sendEncodedData(uuid, "dosatorsEnable", makeEnable, type);
+    public void updateDosatorsEnable(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, "dosatorsEnable", value, type);
     }
 
-    public void updateDeviceEnable(String uuid, String makeEnable, ValueType type) {
-        sendEncodedData(uuid, "deviceEnable", makeEnable, type);
+    public void updateDeviceEnable(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, "deviceEnable", value, type);
+    }
+
+    public void changeAutoTimeSetting(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, "autotime", value, type);
+    }
+
+    public void changeTimeZoneSetting(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, "timezone", value, type);
     }
 }

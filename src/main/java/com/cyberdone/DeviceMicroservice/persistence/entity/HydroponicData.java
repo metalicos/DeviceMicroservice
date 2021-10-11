@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -37,7 +36,7 @@ public class HydroponicData {
     private Double temperatureValue;
     private Double ecValue;
     private Integer tdsValue;
-    private Date microcontrollerTime;
+    private LocalDateTime microcontrollerTime;
 
     @Override
     public boolean equals(Object o) {

@@ -25,25 +25,19 @@ public class HydroponicSettingsService {
     }
 
     public List<HydroponicSettingsDto> getAllSettingsByUuid(String uuid) {
-        return hydroponicSettingsRepository.findAllByUuid(checkUUID(uuid)).stream()
+        return hydroponicSettingsRepository.findAllByUuid(uuid).stream()
                 .map(s -> modelMapper.map(s, HydroponicSettingsDto.class))
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public void deleteAllSettingsByUuid(String uuid) {
-        hydroponicSettingsRepository.deleteAllByUuid(checkUUID(uuid));
+        hydroponicSettingsRepository.deleteAllByUuid(uuid);
     }
 
     public HydroponicSettingsDto getLastSettingByUuid(String uuid) {
-        var settingsList = hydroponicSettingsRepository.findByUuidOrderByMicrocontrollerTimeDesc(checkUUID(uuid));
-        if (settingsList.isEmpty()) {
-            return null;
-        }
-        return modelMapper.map(settingsList.get(0), HydroponicSettingsDto.class);
-    }
-
-    private String checkUUID(String uuid) {
-        return Optional.ofNullable(uuid).orElseThrow(() -> new IllegalStateException("UUID is not valid"));
+        var settingsList = hydroponicSettingsRepository.findByUuidOrderByReceiveTimeDesc(uuid);
+        return modelMapper.map(settingsList.isEmpty() ? new HydroponicSettings() : settingsList.get(0),
+                HydroponicSettingsDto.class);
     }
 }

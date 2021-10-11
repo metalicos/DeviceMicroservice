@@ -34,8 +34,8 @@ public class DataController {
 
     @GetMapping("/last/{amount}")
     @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
-    public ResponseEntity<List<HydroponicDataDto>> getLastThirtyDataByUuid(@RequestParam String uuid,
-                                                                           @PathVariable Integer amount) {
+    public ResponseEntity<List<HydroponicDataDto>> getLastLimitedDataByUuid(@RequestParam String uuid,
+                                                                            @PathVariable Integer amount) {
         return ResponseEntity.ok(hydroponicDataService.getLastLimitedDataByUuid(uuid, amount));
     }
 

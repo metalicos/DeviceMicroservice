@@ -9,9 +9,7 @@ public interface HydroponicSettingsRepository extends JpaRepository<HydroponicSe
 
     List<HydroponicSettings> findAllByUuid(String uuid);
 
-    List<HydroponicSettings> findByUuidOrderByMicrocontrollerTimeDesc(String uuid);
+    List<HydroponicSettings> findByUuidOrderByReceiveTimeDesc(String uuid);
 
     void deleteAllByUuid(String uuid);
-
-    boolean existsByUuid(String uuid);
 }

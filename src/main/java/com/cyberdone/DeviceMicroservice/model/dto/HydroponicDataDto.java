@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -17,5 +16,5 @@ public class HydroponicDataDto {
     private Double temperatureValue;
     private Double ecValue;
     private Integer tdsValue;
-    private Date microcontrollerTime;
+    private LocalDateTime microcontrollerTime;
 }

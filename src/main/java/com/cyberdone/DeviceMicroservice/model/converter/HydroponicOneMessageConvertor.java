@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.decode;
-
 
 @Service
 public class HydroponicOneMessageConvertor {
@@ -22,7 +20,7 @@ public class HydroponicOneMessageConvertor {
                 .temperatureValue(response.getTemperatureValue())
                 .ecValue(response.getEcValue())
                 .tdsValue(response.getTdsValue().intValue())
-                .microcontrollerTime(decode(response.getMicrocontrollerTime()))
+                .microcontrollerTime(response.getMicrocontrollerTime())
                 .build();
     }
 
@@ -46,7 +44,7 @@ public class HydroponicOneMessageConvertor {
                 .restartCounter(response.getRestartCounter())
                 .wifiSSID(response.getWifiSSID())
                 .wifiPASS(response.getWifiPASS())
-                .microcontrollerTime(decode(response.getMicrocontrollerTime()))
+                .microcontrollerTime(response.getMicrocontrollerTime())
                 .build();
     }
 

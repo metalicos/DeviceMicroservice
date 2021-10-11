@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.time.temporal.ChronoField.SECOND_OF_DAY;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class HydroponicDataService {
         return hydroponicDataRepository.findByUuidOrderByMicrocontrollerTimeDesc(checkUUID(uuid)).stream()
                 .map(d -> modelMapper.map(d, HydroponicDataDto.class))
                 .limit(limit)
-                .sorted(Comparator.comparingLong(value -> value.getMicrocontrollerTime().getTime()))
+                .sorted(Comparator.comparingLong(v -> v.getMicrocontrollerTime().getLong(SECOND_OF_DAY)))
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +62,7 @@ public class HydroponicDataService {
         var tmp = hydroponicDataRepository.averageTemperatureByUuid(checkUUID(uuid));
         var tds = hydroponicDataRepository.averageTdsByUuid(checkUUID(uuid));
         return modelMapper.map(
-                new HydroponicData(1L, LocalDateTime.now(), uuid, ph, tmp, ec, tds.intValue(), new Date()),
+                new HydroponicData(1L, LocalDateTime.now(), uuid, ph, tmp, ec, tds.intValue(), LocalDateTime.now()),
                 HydroponicDataDto.class);
     }
 

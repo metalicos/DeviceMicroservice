@@ -7,13 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -28,6 +29,8 @@ public class HydroponicSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @CreationTimestamp
+    private LocalDateTime receiveTime;
     private String uuid;
     private Double mlPerMillisecond;
     private Double regulateErrorPhUp;
@@ -46,7 +49,13 @@ public class HydroponicSettings {
     private Long restartCounter;
     private String wifiSSID;
     private String wifiPASS;
-    private Date microcontrollerTime;
+    private Boolean isDosatorPhUpOpen;
+    private Boolean isDosatorPhDownOpen;
+    private Boolean isDosatorTdsOpen;
+
+    private Boolean autotime;
+    private String timeZone;
+    private LocalDateTime microcontrollerTime;
 
     @Override
     public boolean equals(Object o) {

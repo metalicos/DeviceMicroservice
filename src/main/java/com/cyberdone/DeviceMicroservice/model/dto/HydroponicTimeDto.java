@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,7 +18,8 @@ public class HydroponicTimeDto {
     /**
      * Time in microcontroller.
      */
-    private String microcontrollerTime;
+    private LocalDateTime microcontrollerTime;
+    private String microcontrollerTimeZone = "Europe/Kiev";
     /**
      * Device UUID.
      */

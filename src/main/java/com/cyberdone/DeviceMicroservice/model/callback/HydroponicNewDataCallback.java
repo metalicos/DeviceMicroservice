@@ -1,7 +1,8 @@
 package com.cyberdone.DeviceMicroservice.model.callback;
 
-import com.cyberdone.DeviceMicroservice.model.converter.HydroponicOneMessageConvertor;
 import com.cyberdone.DeviceMicroservice.model.dto.HydroponicAllDataDto;
+import com.cyberdone.DeviceMicroservice.persistence.entity.HydroponicData;
+import com.cyberdone.DeviceMicroservice.persistence.entity.HydroponicSettings;
 import com.cyberdone.DeviceMicroservice.persistence.service.HydroponicDataService;
 import com.cyberdone.DeviceMicroservice.persistence.service.HydroponicSettingsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,16 +24,16 @@ public class HydroponicNewDataCallback implements Callback {
     private final HydroponicDataService hydroponicDataService;
     private final HydroponicSettingsService hydroponicSettingsService;
 
-    private final HydroponicOneMessageConvertor hydroponicOneMessageConvertor;
     private final ObjectMapper mapper;
+    private final ModelMapper modelMapper;
 
     @Override
     @Transactional
     public void execute(MqttClient client, MqttMessage message) {
         try {
             var allData = mapper.readValue(new String(message.getPayload()), HydroponicAllDataDto.class);
-            hydroponicDataService.saveData(hydroponicOneMessageConvertor.toDataEntity(allData));
-            hydroponicSettingsService.saveSetting(hydroponicOneMessageConvertor.toSettingsEntity(allData));
+            hydroponicDataService.saveData(modelMapper.map(allData, HydroponicData.class));
+            hydroponicSettingsService.saveSetting(modelMapper.map(allData, HydroponicSettings.class));
         } catch (JsonProcessingException e) {
             log.error("Json Read fault ", e);
             throw new UncheckedIOException(e);

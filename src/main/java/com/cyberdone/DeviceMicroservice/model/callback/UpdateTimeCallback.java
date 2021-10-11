@@ -15,7 +15,6 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.decode;
 import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.encode;
 
 
@@ -23,7 +22,7 @@ import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDec
 @Service("time")
 @RequiredArgsConstructor
 public class UpdateTimeCallback implements Callback {
-    public static final int DATE_MISMATCH_ERROR_MS = 5_000;
+    public static final int DATE_MISMATCH_ERROR_SECONDS = 5;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -36,13 +35,16 @@ public class UpdateTimeCallback implements Callback {
     }
 
     private void keepInTime(MqttClient client, HydroponicTimeDto hydroponicTimeDto) throws ParseException {
-        var controllerTime = decode(hydroponicTimeDto.getMicrocontrollerTime());
-        var checkTime = LocalDateTime.ofInstant(controllerTime.toInstant(), ZoneId.systemDefault());
-        if (checkTime.isBefore(LocalDateTime.now().minusSeconds(DATE_MISMATCH_ERROR_MS))
-                || checkTime.isAfter(LocalDateTime.now().plusSeconds(DATE_MISMATCH_ERROR_MS))) {
+        var hydroponicTime = hydroponicTimeDto.getMicrocontrollerTime();
+        var timeZone = hydroponicTimeDto.getMicrocontrollerTimeZone();
+        var currentTimeForItsTimezone = LocalDateTime.now(ZoneId.of(timeZone));
+        var lowRange = currentTimeForItsTimezone.minusSeconds(DATE_MISMATCH_ERROR_SECONDS);
+        var highRange = currentTimeForItsTimezone.plusSeconds(DATE_MISMATCH_ERROR_SECONDS);
+
+        if (hydroponicTime.isBefore(lowRange) || hydroponicTime.isAfter(highRange)) {
             try {
                 client.publish("cyberdone/" + hydroponicTimeDto.getUUID() + "/updateTime",
-                        new MqttMessage(encode(LocalDateTime.now()).getBytes(StandardCharsets.UTF_8)));
+                        new MqttMessage(encode(currentTimeForItsTimezone).getBytes(StandardCharsets.UTF_8)));
                 log.info("Time updated. Device UUID={}", hydroponicTimeDto.getUUID());
             } catch (MqttException e) {
                 log.error("Can not update time in microcontroller. Device UUID={} Message={}",
