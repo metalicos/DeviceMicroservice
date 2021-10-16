@@ -2,6 +2,7 @@ package com.cyberdone.DeviceMicroservice.model.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -15,16 +16,16 @@ import java.security.GeneralSecurityException;
 @Service
 public class EncDecService {
 
-    private static SecretKeySpec generateKey() throws UnsupportedEncodingException {
-        return new SecretKeySpec(new byte[]{-1, -2, -3, 100, 100, -88, 100, -95, 100, -69, 95, 48, 77, -78, 100, 62},
-                "AES");
+    @Value("${security.device.key}")
+    private byte[] securityKey;
+
+    private SecretKeySpec generateKey() throws UnsupportedEncodingException {
+        return new SecretKeySpec(securityKey, "AES");
     }
 
-    public String encrypt(String message)
-            throws GeneralSecurityException {
+    public String encrypt(String message) throws GeneralSecurityException {
         try {
-            final SecretKeySpec key = generateKey();
-            byte[] cipherText = encrypt(key, message.getBytes(StandardCharsets.UTF_8));
+            byte[] cipherText = encrypt(generateKey(), message.getBytes(StandardCharsets.UTF_8));
             return String.valueOf(Base64.encodeBase64String(cipherText));
         } catch (UnsupportedEncodingException e) {
             throw new GeneralSecurityException(e);

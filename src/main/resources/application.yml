@@ -20,6 +20,9 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
   jooq:
     sql-dialect: org.hibernate.dialect.MySQLInnoDBDialect
+security:
+  device:
+    key: -1, -2, -3, 100, 100, -88, 100, -95, 100, -69, 95, 48, 77, -78, 100, 62
 ---
 spring:
   config:
