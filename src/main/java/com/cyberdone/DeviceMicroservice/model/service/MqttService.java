@@ -36,11 +36,9 @@ public class MqttService implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-        callbacks.get(Optional.ofNullable(topic).orElseThrow(
-                        () -> new IllegalStateException("Argument: topic is not valid")))
-                .execute(client, Optional.ofNullable(message).orElseThrow(
-                        () -> new IllegalStateException("Argument: MqttMessage is not valid")));
-        log.debug("{}", new Date());
+        callbacks.get(topic).execute(client, Optional.ofNullable(message)
+                .orElseThrow(() -> new IllegalStateException("Argument: MqttMessage is not valid")));
+        log.info("{}", new Date());
     }
 
     @Override
@@ -52,8 +50,9 @@ public class MqttService implements MqttCallback {
             client = setupService.createMqttClient();
             client.setCallback(this);
             client.connect(setupService.createConnectionOptions());
-            client.subscribe("hydro-chip", 2);
-            client.subscribe("time", 2);
+            for (String topic : callbacks.keySet()) {
+                client.subscribe(topic, 2);
+            }
         } catch (MqttException e) {
             log.error("Mqtt connect failed {}", e.getMessage());
         }

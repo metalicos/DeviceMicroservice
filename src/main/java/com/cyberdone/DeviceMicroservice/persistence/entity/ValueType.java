@@ -2,8 +2,7 @@ package com.cyberdone.DeviceMicroservice.persistence.entity;
 
 public enum ValueType {
     NUMBER,
-    DOUBLE,
-    STRING,
+    TEXT,
     TIME,
     SWITCH,
     DIRECTION,

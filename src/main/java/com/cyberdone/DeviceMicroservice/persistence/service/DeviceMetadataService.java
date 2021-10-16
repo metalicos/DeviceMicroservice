@@ -1,5 +1,6 @@
 package com.cyberdone.DeviceMicroservice.persistence.service;
 
+import com.cyberdone.DeviceMicroservice.exception.NotFoundException;
 import com.cyberdone.DeviceMicroservice.persistence.entity.DeviceMetadata;
 import com.cyberdone.DeviceMicroservice.persistence.repository.DeviceMetadataRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,15 @@ public class DeviceMetadataService {
 
     @Transactional
     public DeviceMetadata updateMetadata(String uuid, String name, String description) {
-        if (deviceMetadataRepository.existsByUuid(uuid)) {
-            var meta = deviceMetadataRepository.findByUuid(uuid).get();
-            meta.setName(name);
-            meta.setDescription(description);
-            return deviceMetadataRepository.save(meta);
-        }
-        return deviceMetadataRepository.save(new DeviceMetadata(1L, uuid, name, description));
+        var meta = deviceMetadataRepository.findByUuid(uuid).orElseThrow(
+                () -> new NotFoundException("Device Metadata Not Found for uuid=" + uuid));
+        meta.setName(name);
+        meta.setDescription(description);
+        return deviceMetadataRepository.save(meta);
+    }
+
+    public boolean isEnabled(String uuid) {
+        return deviceMetadataRepository.isEnabled(uuid);
     }
 
     public DeviceMetadata getMetadataByUuid(String uuid) {

@@ -12,13 +12,23 @@ import java.util.TimerTask;
 import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.encode;
 import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.encodeConsideringToValueType;
 import static com.cyberdone.DeviceMicroservice.persistence.entity.ValueType.NONE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.ValueType.TIME;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.AUTOTIME;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.READ_ALL;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.RESTART;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.RESTART_COUNTER;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.SAVE_ALL;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.TIMEZONE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.UPDATE_TIME;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.WIFI_PASS;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.WIFI_SSID;
 
 @Slf4j
-public abstract class AbstractCyberdoneOperationService {
+public abstract class AbstractOperationService {
     protected static final String SLASH = "/";
     private final MqttService mqttService;
 
-    protected AbstractCyberdoneOperationService(MqttService mqttService) {
+    protected AbstractOperationService(MqttService mqttService) {
         this.mqttService = mqttService;
     }
 
@@ -50,31 +60,43 @@ public abstract class AbstractCyberdoneOperationService {
         }, delayMs, periodMs);
     }
 
-    public void updateTime(String uuid, String time, ValueType type) {
-        sendEncodedData(uuid, "updateTime", time, type);
+    public void updateTime(String uuid, LocalDateTime time) {
+        sendData(uuid, UPDATE_TIME.getVal(), encode(time));
     }
 
-    public void updateTime(String uuid, LocalDateTime time) {
-        sendData(uuid, "updateTime", encode(time));
+    public void updateTime(String uuid, String time) {
+        sendEncodedData(uuid, UPDATE_TIME.getVal(), time, TIME);
+    }
+
+    public void changeAutoTimeSetting(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, AUTOTIME.getVal(), value, type);
+    }
+
+    public void changeTimeZoneSetting(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, TIMEZONE.getVal(), value, type);
     }
 
     public void restart(String uuid) {
-        sendEncodedData(uuid, "restart", null, NONE);
+        sendEncodedData(uuid, RESTART.getVal(), null, NONE);
+    }
+
+    public void restartCounter(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, RESTART_COUNTER.getVal(), value, type);
     }
 
     public void saveAllSettings(String uuid) {
-        sendEncodedData(uuid, "saveAll", null, NONE);
+        sendEncodedData(uuid, SAVE_ALL.getVal(), null, NONE);
     }
 
     public void readAllSettings(String uuid) {
-        sendEncodedData(uuid, "readAll", null, NONE);
+        sendEncodedData(uuid, READ_ALL.getVal(), null, NONE);
     }
 
     public void updateWifiPassword(String uuid, String password, ValueType type) {
-        sendEncodedData(uuid, "wifiPASS", password, type);
+        sendEncodedData(uuid, WIFI_PASS.getVal(), password, type);
     }
 
     public void updateWifiSsid(String uuid, String ssid, ValueType type) {
-        sendEncodedData(uuid, "wifiSSID", ssid, type);
+        sendEncodedData(uuid, WIFI_SSID.getVal(), ssid, type);
     }
 }

@@ -28,28 +28,17 @@ public class MqttVariableEncoderDecoderUtils {
                 ENCODE_NUMBER_SYMBOL;
     }
 
-    public static String encode(String variable) {
+    public static String encodeText(String variable) {
         if (variable.contains(ENCODE_STRING_SYMBOL)) {
             throw new IllegalStateException("Symbol ' ' is used for encoding and is restricted for usage");
         }
         return ENCODE_STRING_SYMBOL + variable + ENCODE_STRING_SYMBOL;
     }
 
-    public static String encode(double variable) {
-        return ENCODE_NUMBER_SYMBOL + String.format("%.11f", variable).replace(',', '.') + ENCODE_NUMBER_SYMBOL;
+    public static String encodeNumber(String variable) {
+        return ENCODE_NUMBER_SYMBOL + variable.replace(',', '.') + ENCODE_NUMBER_SYMBOL;
     }
 
-    public static String encode(boolean variable) {
-        return ENCODE_NUMBER_SYMBOL + (variable ? 1 : 0) + ENCODE_NUMBER_SYMBOL;
-    }
-
-    public static String encode(int variable) {
-        return ENCODE_NUMBER_SYMBOL + variable + ENCODE_NUMBER_SYMBOL;
-    }
-
-    public static String encode(long variable) {
-        return ENCODE_NUMBER_SYMBOL + variable + ENCODE_NUMBER_SYMBOL;
-    }
 
     public static Date decode(String date) {
         try {
@@ -62,11 +51,9 @@ public class MqttVariableEncoderDecoderUtils {
 
     public static String encodeConsideringToValueType(String data, ValueType type) {
         return switch (type) {
-            case NUMBER -> encode(Long.parseLong(data));
-            case DOUBLE -> encode(Double.parseDouble(data));
-            case STRING -> encode(data);
+            case NUMBER, SWITCH, DIRECTION -> encodeNumber(data);
+            case TEXT -> encodeText(data);
             case TIME -> encode(decode(data).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-            case SWITCH, DIRECTION -> encode(Integer.parseInt(data));
             case NONE -> "";
         };
     }

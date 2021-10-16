@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.persistence.entity;
+package com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -25,19 +24,25 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "DEVICE_METADATA")
-public class DeviceMetadata {
+@Table(name = "HYDROPONIC_CALIBRATION_DATA")
+public class HydroponicCalibrationData {
+    public Double tdsCalibrationCoefficientValue;
+    public Integer tdsOversampling;
+    public Integer phCalibrationValuePoint;
+    public Double phCalibrationEtalonValue1;
+    public Double phCalibrationEtalonValue2;
+    public Long phCalibrationAdcValue1;
+    public Long phCalibrationAdcValue2;
+    public Double phCalibrationSlope;
+    public Long phCalibrationValueOffset;
+    public Integer phOversampling;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
-
     private String uuid;
-    private String name;
-    private String description;
-    @Enumerated(value = EnumType.STRING)
-    private DeviceType deviceType;
-    private Boolean accessEnabled;
+    @CreationTimestamp
+    private LocalDateTime receiveTime;
+    private LocalDateTime microcontrollerTime;
 
     @Override
     public boolean equals(Object o) {
@@ -47,7 +52,7 @@ public class DeviceMetadata {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        DeviceMetadata that = (DeviceMetadata) o;
+        HydroponicCalibrationData that = (HydroponicCalibrationData) o;
         return Objects.equals(id, that.id);
     }
 

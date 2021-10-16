@@ -13,25 +13,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import static com.cyberdone.DeviceMicroservice.validation.ValidationConstants.UUID_FAILED_MSG;
+import static com.cyberdone.DeviceMicroservice.validation.ValidationConstants.UUID_PATTERN;
+import static com.cyberdone.DeviceMicroservice.validation.ValidationConstants.VALUE_IS_BLANK_MSG;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/metadata")
 public class MetadataController {
-
     private final DeviceMetadataService metadataService;
 
     @GetMapping
     @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
-    public ResponseEntity<DeviceMetadata> getMetadataByUuid(@RequestParam String uuid) {
+    public ResponseEntity<DeviceMetadata> getMetadataByUuid(
+            @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
+            @RequestParam String uuid) {
         return ResponseEntity.ok(metadataService.getMetadataByUuid(uuid));
     }
 
     @PostMapping
     @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
-    public ResponseEntity<String> updateMetadata(@RequestParam String uuid,
-                                                 @RequestParam String name,
-                                                 @RequestParam String description) {
+    public ResponseEntity<String> updateMetadata(
+            @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
+            @RequestParam String uuid,
+            @NotBlank(message = VALUE_IS_BLANK_MSG)
+            @RequestParam String name,
+            @NotBlank(message = VALUE_IS_BLANK_MSG)
+            @RequestParam String description) {
         log.info("{} {} {}", uuid, name, description);
         metadataService.updateMetadata(uuid, name, description);
         return ResponseEntity.ok("OK");
@@ -39,7 +51,9 @@ public class MetadataController {
 
     @DeleteMapping
     @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
-    public ResponseEntity<String> deleteMetadata(@RequestParam String uuid) {
+    public ResponseEntity<String> deleteMetadata(
+            @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
+            @RequestParam String uuid) {
         metadataService.deleteMetadata(uuid);
         return ResponseEntity.ok("OK");
     }

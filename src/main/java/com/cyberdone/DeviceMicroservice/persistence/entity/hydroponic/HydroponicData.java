@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.persistence.entity;
+package com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,37 +24,20 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "HYDROPONIC_SETTINGS")
-public class HydroponicSettings {
+@Table(name = "HYDROPONIC_DATA")
+public class HydroponicData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @CreationTimestamp
     private LocalDateTime receiveTime;
     private String uuid;
-    private Double mlPerMillisecond;
-    private Double regulateErrorPhUp;
-    private Double regulateErrorPhDown;
-    private Double regulateErrorFertilizer;
-    private Double phUpDoseMl;
-    private Double phDownDoseMl;
-    private Double fertilizerDoseMl;
-    private Long recheckDosatorsAfterMs;
-    private Double setupPhValue;
-    private Long setupTdsValue;
-    private Double setupTemperatureValue;
-    private Boolean deviceEnable;
-    private Boolean dosatorsEnable;
-    private Boolean sensorsEnable;
-    private Long restartCounter;
-    private String wifiSSID;
-    private String wifiPASS;
-    private Boolean isDosatorPhUpOpen;
-    private Boolean isDosatorPhDownOpen;
-    private Boolean isDosatorTdsOpen;
-
-    private Boolean autotime;
-    private String timeZone;
+    private Double phValue;
+    private Double temperatureValue;
+    private Integer tdsValue;
+    private Boolean isDispenserPhUpOpen;
+    private Boolean isDispenserPhDownOpen;
+    private Boolean isDispenserTdsOpen;
     private LocalDateTime microcontrollerTime;
 
     @Override
@@ -65,7 +48,7 @@ public class HydroponicSettings {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        HydroponicSettings that = (HydroponicSettings) o;
+        HydroponicData that = (HydroponicData) o;
         return Objects.equals(id, that.id);
     }
 

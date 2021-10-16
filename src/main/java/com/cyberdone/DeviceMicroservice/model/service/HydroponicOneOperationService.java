@@ -2,117 +2,163 @@ package com.cyberdone.DeviceMicroservice.model.service;
 
 
 import com.cyberdone.DeviceMicroservice.persistence.entity.ValueType;
+import com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic.DirectionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import static com.cyberdone.DeviceMicroservice.persistence.entity.ValueType.NONE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.CALIBRATE_PH_CLEAR;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.CALIBRATE_PH_HIGH;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.CALIBRATE_PH_LOW;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.CALIBRATE_TDS;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.CALIBRATE_TDS_CLEAR;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.DISPENSERS_ENABLE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.ML_PER_MILLISECOND;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_CALIBRATION_ADC1;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_CALIBRATION_ADC2;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_CALIBRATION_ADC_OFFSET;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_CALIBRATION_POINT;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_CALIBRATION_SLOPE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_CALIBRATION_VALUE1;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_CALIBRATION_VALUE2;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_DOWN_DOSE_ML;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_DOWN_PUMP;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_OVERSAMPLING;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_UP_DOSE_ML;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.PH_UP_PUMP;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.RECHECK_DISPENSERS_AFTER_MS;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.REGULATE_ERROR_PH;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.REGULATE_ERROR_TDS;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.SENSORS_ENABLE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.SETUP_PH_VALUE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.SETUP_TDS_VALUE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.TDS_DOSE_ML;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.TDS_KVALUE;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.TDS_OVERSAMPLING;
+import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum.TDS_PUMP;
 
 @Slf4j
 @Service
-public class HydroponicOneOperationService extends AbstractCyberdoneOperationService {
+public class HydroponicOneOperationService extends AbstractOperationService {
 
     public HydroponicOneOperationService(MqttService mqttService) {
         super(mqttService);
     }
 
-    public void startPhUpPump(String uuid, String direction, ValueType type) {
-        sendEncodedData(uuid, "phUpStart", direction, type);
+    public void phUpPump(String uuid, DirectionEnum dir, ValueType type) {
+        sendEncodedData(uuid, PH_UP_PUMP.getVal(), dir.getVal(), type);
     }
 
-    public void stopPhUpPump(String uuid) {
-        sendEncodedData(uuid, "phUpStop", null, NONE);
+    public void phDownPump(String uuid, DirectionEnum dir, ValueType type) {
+        sendEncodedData(uuid, PH_DOWN_PUMP.getVal(), dir.getVal(), type);
     }
 
-    public void startPhDownPump(String uuid, String direction, ValueType type) {
-        sendEncodedData(uuid, "phDownStart", direction, type);
-    }
-
-    public void stopPhDownPump(String uuid) {
-        sendEncodedData(uuid, "phDownStop", null, NONE);
-    }
-
-    public void startFertilizerPump(String uuid, String direction, ValueType type) {
-        sendEncodedData(uuid, "fertilizerStart", direction, type);
-    }
-
-    public void stopFertilizerPump(String uuid) {
-        sendEncodedData(uuid, "fertilizerStop", null, NONE);
+    public void tdsPump(String uuid, DirectionEnum dir, ValueType type) {
+        sendEncodedData(uuid, TDS_PUMP.getVal(), dir.getVal(), type);
     }
 
     public void calibrateTdsSensor(String uuid, String etaloneValue, ValueType type) {
-        sendEncodedData(uuid, "calibrateTds", etaloneValue, type);
+        sendEncodedData(uuid, CALIBRATE_TDS.getVal(), etaloneValue, type);
     }
 
     public void clearCalibrationOfTdsSensor(String uuid) {
-        sendEncodedData(uuid, "calibrateTdsClear", null, NONE);
+        sendEncodedData(uuid, CALIBRATE_TDS_CLEAR.getVal(), null, NONE);
     }
 
     public void calibratePhSensorLowPoint(String uuid, String etaloneValue, ValueType type) {
-        sendEncodedData(uuid, "calibratePhLow", etaloneValue, type);
+        sendEncodedData(uuid, CALIBRATE_PH_LOW.getVal(), etaloneValue, type);
     }
 
     public void calibratePhSensorHighPoint(String uuid, String etaloneValue, ValueType type) {
-        sendEncodedData(uuid, "calibratePhHigh", etaloneValue, type);
+        sendEncodedData(uuid, CALIBRATE_PH_HIGH.getVal(), etaloneValue, type);
     }
 
     public void clearCalibrationOfPhSensor(String uuid) {
-        sendEncodedData(uuid, "calibratePhClear", null, NONE);
+        sendEncodedData(uuid, CALIBRATE_PH_CLEAR.getVal(), null, NONE);
     }
 
     public void updateSetupPhValue(String uuid, String phValue, ValueType type) {
-        sendEncodedData(uuid, "setupPhValue", phValue, type);
+        sendEncodedData(uuid, SETUP_PH_VALUE.getVal(), phValue, type);
     }
 
     public void updateSetupTdsValue(String uuid, String tdsValue, ValueType type) {
-        sendEncodedData(uuid, "setupTdsValue", tdsValue, type);
+        sendEncodedData(uuid, SETUP_TDS_VALUE.getVal(), tdsValue, type);
     }
 
-    public void updateRecheckDosatorsAfterTime(String uuid, String timeInMs, ValueType type) {
-        sendEncodedData(uuid, "recheckDosatorsAfterMs", timeInMs, type);
+    public void updateRecheckDispensersAfterTime(String uuid, String timeInMs, ValueType type) {
+        sendEncodedData(uuid, RECHECK_DISPENSERS_AFTER_MS.getVal(), timeInMs, type);
     }
 
     public void updatePhUpDose(String uuid, String doseMl, ValueType type) {
-        sendEncodedData(uuid, "phUpDoseMl", doseMl, type);
+        sendEncodedData(uuid, PH_UP_DOSE_ML.getVal(), doseMl, type);
     }
 
     public void updatePhDownDose(String uuid, String doseMl, ValueType type) {
-        sendEncodedData(uuid, "phDownDoseMl", doseMl, type);
+        sendEncodedData(uuid, PH_DOWN_DOSE_ML.getVal(), doseMl, type);
     }
 
-    public void updateFertilizerDose(String uuid, String doseMl, ValueType type) {
-        sendEncodedData(uuid, "fertilizerDoseMl", doseMl, type);
+    public void updateTdsDose(String uuid, String doseMl, ValueType type) {
+        sendEncodedData(uuid, TDS_DOSE_ML.getVal(), doseMl, type);
     }
 
     public void updateRegulatePhError(String uuid, String phError, ValueType type) {
-        sendEncodedData(uuid, "regulateErrorPhUp", phError, type);
-        sendEncodedData(uuid, "regulateErrorPhDown", phError, type);
+        sendEncodedData(uuid, REGULATE_ERROR_PH.getVal(), phError, type);
     }
 
     public void updateRegulateTdsError(String uuid, String ppmError, ValueType type) {
-        sendEncodedData(uuid, "regulateErrorFertilizer", ppmError, type);
+        sendEncodedData(uuid, REGULATE_ERROR_TDS.getVal(), ppmError, type);
     }
 
     public void updatePumpSpeedMlPerMilliseconds(String uuid, String mlPerMillisecond, ValueType type) {
-        sendEncodedData(uuid, "mlPerMilisecond", mlPerMillisecond, type);
+        sendEncodedData(uuid, ML_PER_MILLISECOND.getVal(), mlPerMillisecond, type);
     }
 
     public void updateSensorsEnable(String uuid, String makeEnable, ValueType type) {
-        sendEncodedData(uuid, "sensorsEnable", makeEnable, type);
+        sendEncodedData(uuid, SENSORS_ENABLE.getVal(), makeEnable, type);
     }
 
-    public void updateDosatorsEnable(String uuid, String value, ValueType type) {
-        sendEncodedData(uuid, "dosatorsEnable", value, type);
+    public void updateDispensersEnable(String uuid, String makeEnable, ValueType type) {
+        sendEncodedData(uuid, DISPENSERS_ENABLE.getVal(), makeEnable, type);
     }
 
-    public void updateDeviceEnable(String uuid, String value, ValueType type) {
-        sendEncodedData(uuid, "deviceEnable", value, type);
+    public void phCalibrationPoint(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_CALIBRATION_POINT.getVal(), value, type);
     }
 
-    public void changeAutoTimeSetting(String uuid, String value, ValueType type) {
-        sendEncodedData(uuid, "autotime", value, type);
+    public void phCalibrationValue1(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_CALIBRATION_VALUE1.getVal(), value, type);
     }
 
-    public void changeTimeZoneSetting(String uuid, String value, ValueType type) {
-        sendEncodedData(uuid, "timezone", value, type);
+    public void phCalibrationValue2(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_CALIBRATION_VALUE2.getVal(), value, type);
     }
+
+    public void phCalibrationAdc1(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_CALIBRATION_ADC1.getVal(), value, type);
+    }
+
+    public void phCalibrationAdc2(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_CALIBRATION_ADC2.getVal(), value, type);
+    }
+
+    public void phCalibrationSlope(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_CALIBRATION_SLOPE.getVal(), value, type);
+    }
+
+    public void phCalibrationAdcOffset(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_CALIBRATION_ADC_OFFSET.getVal(), value, type);
+    }
+
+    public void phOversampling(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, PH_OVERSAMPLING.getVal(), value, type);
+    }
+
+    public void tdsKValue(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, TDS_KVALUE.getVal(), value, type);
+    }
+
+    public void tdsOversampling(String uuid, String value, ValueType type) {
+        sendEncodedData(uuid, TDS_OVERSAMPLING.getVal(), value, type);
+    }
+
 }

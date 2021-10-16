@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -25,19 +24,23 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "DEVICE_METADATA")
-public class DeviceMetadata {
+@Table(name = "DEVICE_SPECIAL_INFORMATION")
+public class DeviceSpecialInformation {
+    public Integer wifiRssi;
+    public String wifiBsid;
+    public String localIp;
+    public String subnetMask;
+    public String gatewayIP;
+    public String macAddr;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
-
     private String uuid;
-    private String name;
-    private String description;
-    @Enumerated(value = EnumType.STRING)
-    private DeviceType deviceType;
-    private Boolean accessEnabled;
+    private String wifiSSID;
+    private String wifiPASS;
+
+    @CreationTimestamp
+    private LocalDateTime receiveTime;
 
     @Override
     public boolean equals(Object o) {
@@ -47,7 +50,7 @@ public class DeviceMetadata {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        DeviceMetadata that = (DeviceMetadata) o;
+        DeviceSpecialInformation that = (DeviceSpecialInformation) o;
         return Objects.equals(id, that.id);
     }
 

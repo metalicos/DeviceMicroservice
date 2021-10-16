@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class WebRelayOperationService extends AbstractCyberdoneOperationService {
+public class WebRelayOperationService extends AbstractOperationService {
 
     public WebRelayOperationService(MqttService mqttService) {
         super(mqttService);

@@ -20,6 +20,11 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
   jooq:
     sql-dialect: org.hibernate.dialect.MySQLInnoDBDialect
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
 
 mqtt:
   username: user
@@ -37,34 +42,16 @@ mqtt:
 spring:
   config:
     activate:
-      on-profile: dev
-
-mqtt:
-  username: user
-  password: Qwerty123
-  clean-session: true
-  connection-timeout: 60
-  auto-reconnect: true
-  max-in-flight-messages: 100
-  client:
-    name: HydroPonicMicroserviceApp
-    url: tcp://192.168.1.100:1883
-    quality-of-service: 2
-
----
-spring:
-  config:
-    activate:
       on-profile: stg
 mqtt:
   username: user
   password: Qwerty123
-  clean-session: true
-  connection-timeout: 60
+  clean-session: false
+  connection-timeout: 10
   auto-reconnect: true
   max-in-flight-messages: 100
   client:
-    name: HydroPonicMicroserviceApp
+    name: CyberDoneDeviceMicroservice
     url: tcp://192.168.1.100:1883
     quality-of-service: 2
 
@@ -74,13 +61,13 @@ spring:
     activate:
       on-profile: prod
 mqtt:
-  username: user
-  password: Qwerty123
+  username: MasterOstapSlaveComputer
+  password: NzYyODE5MzktMWJkNy00NmE4LWFhMjUtZGE1YzRhNWNiYWMw
   clean-session: true
   connection-timeout: 60
   auto-reconnect: true
   max-in-flight-messages: 100
   client:
     name: HydroPonicMicroserviceApp
-    url: tcp://192.168.1.100:1883
+    url: ssl://e1fb12f157e74729b0518337c71a3241.s1.eu.hivemq.cloud:8883
     quality-of-service: 2

@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.persistence.entity;
+package com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,18 +24,37 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "HYDROPONIC_DATA")
-public class HydroponicData {
+@Table(name = "HYDROPONIC_SETTINGS")
+public class HydroponicSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @CreationTimestamp
     private LocalDateTime receiveTime;
     private String uuid;
+
     private Double phValue;
     private Double temperatureValue;
-    private Double ecValue;
-    private Integer tdsValue;
+    private Double tdsValue;
+    private Boolean isDispenserPhUpOpen;
+    private Boolean isDispenserPhDownOpen;
+    private Boolean isDispenserTdsOpen;
+    private Double setupPhValue;
+    private Long setupTdsValue;
+    private Double regulateErrorPh;
+    private Double regulateErrorFertilizer;
+    private Double mlPerMilisecond;
+    private Double phUpDoseMl;
+    private Double phDownDoseMl;
+    private Double fertilizerDoseMl;
+    private Long recheckDispensersAfterMs;
+    private Long restartCounter;
+    private Boolean dispensersEnable;
+    private Boolean sensorsEnable;
+    private Boolean autotime;
+    private String timeZone;
+    private String wifiSsid;
+    private String wifiPass;
     private LocalDateTime microcontrollerTime;
 
     @Override
@@ -46,7 +65,7 @@ public class HydroponicData {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        HydroponicData that = (HydroponicData) o;
+        HydroponicSettings that = (HydroponicSettings) o;
         return Objects.equals(id, that.id);
     }
 

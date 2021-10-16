@@ -1,8 +1,8 @@
 package com.cyberdone.DeviceMicroservice.persistence.service;
 
 import com.cyberdone.DeviceMicroservice.model.dto.HydroponicDataDto;
-import com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic.HydroponicData;
-import com.cyberdone.DeviceMicroservice.persistence.repository.HydroponicDataRepository;
+import com.cyberdone.DeviceMicroservice.persistence.entity.DeviceSpecialInformation;
+import com.cyberdone.DeviceMicroservice.persistence.repository.DeviceSpecialInformationRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -19,22 +19,23 @@ import static java.time.temporal.ChronoField.SECOND_OF_DAY;
 
 @Service
 @RequiredArgsConstructor
-public class HydroponicDataService {
+public class DeviceSpecialInformationService {
     private final ModelMapper modelMapper;
-    private final HydroponicDataRepository hydroponicDataRepository;
+    private final DeviceSpecialInformationRepository specialInformationRepository;
 
     @Transactional
-    public void saveData(@NotNull(message = VALUE_IS_NULL_MSG) HydroponicData data) {
-        hydroponicDataRepository.save(data);
+    public void saveSpecialInformation(
+            @NotNull(message = VALUE_IS_NULL_MSG) DeviceSpecialInformation specialInformation) {
+        specialInformationRepository.save(specialInformation);
     }
 
     @Transactional
     public void deleteDataById(Long id) {
-        hydroponicDataRepository.deleteById(id);
+        specialInformationRepository.deleteById(id);
     }
 
     public List<HydroponicDataDto> getLastDataByUuid(String uuid, int page, int limit) {
-        return hydroponicDataRepository.findLastData(uuid, PageRequest.of(page, limit)).stream()
+        return specialInformationRepository.findLastInformation(uuid, PageRequest.of(page, limit)).stream()
                 .map(d -> modelMapper.map(d, HydroponicDataDto.class))
                 .sorted(Comparator.comparingLong(v -> v.getMicrocontrollerTime().getLong(SECOND_OF_DAY)))
                 .collect(Collectors.toList());

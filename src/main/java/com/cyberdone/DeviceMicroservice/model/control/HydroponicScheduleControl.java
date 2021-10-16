@@ -2,9 +2,12 @@ package com.cyberdone.DeviceMicroservice.model.control;
 
 import com.cyberdone.DeviceMicroservice.model.service.HydroponicOneOperationService;
 import com.cyberdone.DeviceMicroservice.persistence.entity.ValueType;
+import com.cyberdone.DeviceMicroservice.persistence.entity.topic.hydroponic.HydroponicTopicEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import static com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic.DirectionEnum.direction;
 
 @Slf4j
 @Service("hydroponic")
@@ -14,30 +17,38 @@ public class HydroponicScheduleControl implements ScheduleControllable {
 
     @Override
     public void control(ValueType type, String data, String topic, String uuid) {
-        switch (topic) {
-            case "phUpStart" -> operationService.startPhUpPump(uuid, data, type);
-            case "phUpStop" -> operationService.stopPhUpPump(uuid);
-            case "phDownStart" -> operationService.startPhDownPump(uuid, data, type);
-            case "phDownStop" -> operationService.stopPhDownPump(uuid);
-            case "fertilizerStart" -> operationService.startFertilizerPump(uuid, data, type);
-            case "fertilizerStop" -> operationService.stopFertilizerPump(uuid);
-            case "calibrateTds" -> operationService.calibrateTdsSensor(uuid, data, type);
-            case "calibrateTdsClear" -> operationService.clearCalibrationOfTdsSensor(uuid);
-            case "calibratePhLow" -> operationService.calibratePhSensorLowPoint(uuid, data, type);
-            case "calibratePhHigh" -> operationService.calibratePhSensorHighPoint(uuid, data, type);
-            case "calibratePhClear" -> operationService.clearCalibrationOfPhSensor(uuid);
-            case "setupPhValue" -> operationService.updateSetupPhValue(uuid, data, type);
-            case "setupTdsValue" -> operationService.updateSetupTdsValue(uuid, data, type);
-            case "recheckDosatorsAfterMs" -> operationService.updateRecheckDosatorsAfterTime(uuid, data, type);
-            case "phUpDoseMl" -> operationService.updatePhUpDose(uuid, data, type);
-            case "phDownDoseMl" -> operationService.updatePhDownDose(uuid, data, type);
-            case "fertilizerDoseMl" -> operationService.updateFertilizerDose(uuid, data, type);
-            case "regulateErrorPh" -> operationService.updateRegulatePhError(uuid, data, type);
-            case "regulateErrorFertilizer" -> operationService.updateRegulateTdsError(uuid, data, type);
-            case "mlPerMilisecond" -> operationService.updatePumpSpeedMlPerMilliseconds(uuid, data, type);
-            case "dosatorsEnable" -> operationService.updateDosatorsEnable(uuid, data, type);
+        controlCommonTopics(operationService, type, data, topic, uuid, log);
+        switch (HydroponicTopicEnum.topic(topic)) {
+            case PH_UP_PUMP -> operationService.phUpPump(uuid, direction(data), type);
+            case PH_DOWN_PUMP -> operationService.phDownPump(uuid, direction(data), type);
+            case TDS_PUMP -> operationService.tdsPump(uuid, direction(data), type);
+            case ML_PER_MILLISECOND -> operationService.updatePumpSpeedMlPerMilliseconds(uuid, data, type);
+            case REGULATE_ERROR_PH -> operationService.updateRegulatePhError(uuid, data, type);
+            case REGULATE_ERROR_TDS -> operationService.updateRegulateTdsError(uuid, data, type);
+            case PH_UP_DOSE_ML -> operationService.updatePhUpDose(uuid, data, type);
+            case PH_DOWN_DOSE_ML -> operationService.updatePhDownDose(uuid, data, type);
+            case TDS_DOSE_ML -> operationService.updateTdsDose(uuid, data, type);
+            case RECHECK_DISPENSERS_AFTER_MS -> operationService.updateRecheckDispensersAfterTime(uuid, data, type);
+            case SETUP_PH_VALUE -> operationService.updateSetupPhValue(uuid, data, type);
+            case SETUP_TDS_VALUE -> operationService.updateSetupTdsValue(uuid, data, type);
+            case DISPENSERS_ENABLE -> operationService.updateDispensersEnable(uuid, data, type);
+            case SENSORS_ENABLE -> operationService.updateSensorsEnable(uuid, data, type);
+            case CALIBRATE_PH_LOW -> operationService.calibratePhSensorLowPoint(uuid, data, type);
+            case CALIBRATE_PH_HIGH -> operationService.calibratePhSensorHighPoint(uuid, data, type);
+            case CALIBRATE_PH_CLEAR -> operationService.clearCalibrationOfPhSensor(uuid);
+            case CALIBRATE_TDS -> operationService.calibrateTdsSensor(uuid, data, type);
+            case CALIBRATE_TDS_CLEAR -> operationService.clearCalibrationOfTdsSensor(uuid);
+            case PH_CALIBRATION_POINT -> operationService.phCalibrationPoint(uuid, data, type);
+            case PH_CALIBRATION_VALUE1 -> operationService.phCalibrationValue1(uuid, data, type);
+            case PH_CALIBRATION_VALUE2 -> operationService.phCalibrationValue2(uuid, data, type);
+            case PH_CALIBRATION_ADC1 -> operationService.phCalibrationAdc1(uuid, data, type);
+            case PH_CALIBRATION_ADC2 -> operationService.phCalibrationAdc2(uuid, data, type);
+            case PH_CALIBRATION_SLOPE -> operationService.phCalibrationSlope(uuid, data, type);
+            case PH_CALIBRATION_ADC_OFFSET -> operationService.phCalibrationAdcOffset(uuid, data, type);
+            case PH_OVERSAMPLING -> operationService.phOversampling(uuid, data, type);
+            case TDS_KVALUE -> operationService.tdsKValue(uuid, data, type);
+            case TDS_OVERSAMPLING -> operationService.tdsOversampling(uuid, data, type);
+            case UNKNOWN -> log.info("Topic={} is not of type HydroponicTopic", topic);
         }
-        controlCommonTopics(operationService, type, data, topic, uuid);
     }
-
 }

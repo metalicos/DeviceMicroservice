@@ -1,9 +1,11 @@
 package com.cyberdone.DeviceMicroservice.model.callback;
 
-import com.cyberdone.DeviceMicroservice.model.dto.HydroponicTimeDto;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.HydroponicTimeDto;
+import com.cyberdone.DeviceMicroservice.model.service.EncDecService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -19,22 +21,26 @@ import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDec
 
 
 @Slf4j
-@Service("time")
+@Service("device-microservice/autotime")
 @RequiredArgsConstructor
-public class UpdateTimeCallback implements Callback {
+public class AutotimeCallback implements Callback {
     public static final int DATE_MISMATCH_ERROR_SECONDS = 5;
     private final ObjectMapper objectMapper;
+    private final EncDecService encDecService;
 
     @Override
+    @SneakyThrows
     public void execute(MqttClient client, MqttMessage message) {
+        var decryptedData = encDecService.decrypt(new String(message.getPayload()));
         try {
-            keepInTime(client, objectMapper.readValue(new String(message.getPayload()), HydroponicTimeDto.class));
+            keepInTime(client, objectMapper.readValue(decryptedData, HydroponicTimeDto.class));
         } catch (JsonProcessingException | ParseException ex) {
             log.error("Error read Microcontroller's Date. {}", ex.getMessage());
         }
     }
 
     private void keepInTime(MqttClient client, HydroponicTimeDto hydroponicTimeDto) throws ParseException {
+        log.info("{}", hydroponicTimeDto);
         var hydroponicTime = hydroponicTimeDto.getMicrocontrollerTime();
         var timeZone = hydroponicTimeDto.getMicrocontrollerTimeZone();
         var currentTimeForItsTimezone = LocalDateTime.now(ZoneId.of(timeZone));
@@ -43,12 +49,12 @@ public class UpdateTimeCallback implements Callback {
 
         if (hydroponicTime.isBefore(lowRange) || hydroponicTime.isAfter(highRange)) {
             try {
-                client.publish("cyberdone/" + hydroponicTimeDto.getUUID() + "/updateTime",
+                client.publish("cyberdone/" + hydroponicTimeDto.getUuid() + "/updateTime",
                         new MqttMessage(encode(currentTimeForItsTimezone).getBytes(StandardCharsets.UTF_8)));
-                log.info("Time updated. Device UUID={}", hydroponicTimeDto.getUUID());
+                log.info("Time updated. Device UUID={}", hydroponicTimeDto.getUuid());
             } catch (MqttException e) {
                 log.error("Can not update time in microcontroller. Device UUID={} Message={}",
-                        hydroponicTimeDto.getUUID(), e.getMessage());
+                        hydroponicTimeDto.getUuid(), e.getMessage());
             }
         }
     }
