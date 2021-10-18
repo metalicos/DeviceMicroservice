@@ -1,6 +1,6 @@
 package com.cyberdone.DeviceMicroservice.persistence.service;
 
-import com.cyberdone.DeviceMicroservice.model.dto.HydroponicDataDto;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicDataDto;
 import com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic.HydroponicData;
 import com.cyberdone.DeviceMicroservice.persistence.repository.HydroponicDataRepository;
 import lombok.RequiredArgsConstructor;

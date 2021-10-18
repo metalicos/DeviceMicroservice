@@ -1,6 +1,6 @@
 package com.cyberdone.DeviceMicroservice.model.callback;
 
-import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.HydroponicAllDataDto;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicAllDataDto;
 import com.cyberdone.DeviceMicroservice.model.service.EncDecService;
 import com.cyberdone.DeviceMicroservice.persistence.entity.DeviceSpecialInformation;
 import com.cyberdone.DeviceMicroservice.persistence.entity.hydroponic.HydroponicCalibrationData;
@@ -40,6 +40,7 @@ public class HydroponicV1SettingsCallback implements Callback {
     @Transactional
     public void execute(MqttClient client, MqttMessage message) {
         var decryptedData = encDecService.decrypt(new String(message.getPayload()));
+        log.info("\n{}", decryptedData);
         try {
             var allData = mapper.readValue(decryptedData, HydroponicAllDataDto.class);
             hydroponicDataService.saveData(modelMapper.map(allData, HydroponicData.class));

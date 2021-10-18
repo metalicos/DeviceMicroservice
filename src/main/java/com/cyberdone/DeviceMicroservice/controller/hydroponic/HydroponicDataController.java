@@ -1,6 +1,6 @@
 package com.cyberdone.DeviceMicroservice.controller.hydroponic;
 
-import com.cyberdone.DeviceMicroservice.model.dto.HydroponicDataDto;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicDataDto;
 import com.cyberdone.DeviceMicroservice.persistence.service.HydroponicDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

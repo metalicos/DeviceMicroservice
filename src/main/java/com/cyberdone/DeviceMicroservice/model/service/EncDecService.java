@@ -16,7 +16,7 @@ import java.security.GeneralSecurityException;
 @Service
 public class EncDecService {
 
-    @Value("${security.device.key}")
+    @Value("${security.aes-key}")
     private byte[] securityKey;
 
     private SecretKeySpec generateKey() throws UnsupportedEncodingException {

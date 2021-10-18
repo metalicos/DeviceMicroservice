@@ -8,6 +8,8 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class MqttSetupService {
@@ -37,7 +39,7 @@ public class MqttSetupService {
     private Integer mqttMaxInFlightMessages;
 
     public MqttClient createMqttClient() throws MqttException {
-        return new MqttClient(mqttClientUrl, mqttClientName, new MemoryPersistence());
+        return new MqttClient(mqttClientUrl, mqttClientName + UUID.randomUUID(), new MemoryPersistence());
     }
 
     public MqttConnectOptions createConnectionOptions() {

@@ -1,5 +1,6 @@
 package com.cyberdone.DeviceMicroservice.controller;
 
+import com.cyberdone.DeviceMicroservice.model.dto.DeviceMetadataDto;
 import com.cyberdone.DeviceMicroservice.persistence.entity.DeviceMetadata;
 import com.cyberdone.DeviceMicroservice.persistence.service.DeviceMetadataService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class MetadataController {
 
     @GetMapping
     @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
-    public ResponseEntity<DeviceMetadata> getMetadataByUuid(
+    public ResponseEntity<DeviceMetadataDto> getMetadataByUuid(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid) {
         return ResponseEntity.ok(metadataService.getMetadataByUuid(uuid));

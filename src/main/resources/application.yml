@@ -1,12 +1,12 @@
 server:
   port: 5555
-
+  servlet:
+    context-path:
 spring:
   application:
     name: cyber-done-device-microservice
   profiles:
     active: dev
-
   datasource:
     username: root
     password: root
@@ -21,14 +21,9 @@ spring:
   jooq:
     sql-dialect: org.hibernate.dialect.MySQLInnoDBDialect
 security:
-  device:
-    key: -1, -2, -3, 100, 100, -88, 100, -95, 100, -69, 95, 48, 77, -78, 100, 62
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-
+  aes-key: -1, -2, -3, 100, 100, -88, 100, -95, 100, -69, 95, 48, 77, -78, 100, 62
+  jwt-secret: d2980f58-3d82-4144-b802-406f4b47930b-5784cca4-0b50-425e-ac6c-bd651e0c788d
+  jwt-expiration-time-ms: 86400000 #24 hours 86400000
 mqtt:
   username: user
   password: Qwerty123
@@ -39,38 +34,4 @@ mqtt:
   client:
     name: CyberDoneDeviceMicroservice
     url: tcp://192.168.1.100:1883
-    quality-of-service: 2
-
----
-spring:
-  config:
-    activate:
-      on-profile: stg
-mqtt:
-  username: user
-  password: Qwerty123
-  clean-session: false
-  connection-timeout: 10
-  auto-reconnect: true
-  max-in-flight-messages: 100
-  client:
-    name: CyberDoneDeviceMicroservice
-    url: tcp://192.168.1.100:1883
-    quality-of-service: 2
-
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-mqtt:
-  username: MasterOstapSlaveComputer
-  password: NzYyODE5MzktMWJkNy00NmE4LWFhMjUtZGE1YzRhNWNiYWMw
-  clean-session: true
-  connection-timeout: 60
-  auto-reconnect: true
-  max-in-flight-messages: 100
-  client:
-    name: HydroPonicMicroserviceApp
-    url: ssl://e1fb12f157e74729b0518337c71a3241.s1.eu.hivemq.cloud:8883
     quality-of-service: 2

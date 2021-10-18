@@ -1,6 +1,6 @@
 package com.cyberdone.DeviceMicroservice.controller.hydroponic;
 
-import com.cyberdone.DeviceMicroservice.model.dto.HydroponicSettingsDto;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicSettingsDto;
 import com.cyberdone.DeviceMicroservice.persistence.service.HydroponicSettingsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

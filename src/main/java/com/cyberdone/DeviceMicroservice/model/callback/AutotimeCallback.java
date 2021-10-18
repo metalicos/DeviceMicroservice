@@ -1,6 +1,6 @@
 package com.cyberdone.DeviceMicroservice.model.callback;
 
-import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.HydroponicTimeDto;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicTimeDto;
 import com.cyberdone.DeviceMicroservice.model.service.EncDecService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
