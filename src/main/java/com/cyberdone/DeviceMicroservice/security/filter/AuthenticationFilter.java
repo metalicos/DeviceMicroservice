@@ -30,7 +30,7 @@ public abstract class AuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) {
         try {
             var token = parseJwt(request);
-            if (nonNull(token) && jwtService.validateJwtToken(token)) {
+            if (jwtService.isValidToken(token)) {
                 roles = new HashSet<>(Arrays.asList(jwtService.getRoles(token)));
                 authenticate(request, jwtService.getUsername(token));
             }

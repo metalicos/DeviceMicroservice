@@ -31,9 +31,6 @@ public class JwtService {
     @Value("${security.jwt-secret}")
     private String jwtSecret;
 
-    @Value("${security.jwt-expiration-time-ms}")
-    private Long jwtExpirationTimeInMs;
-
     private final ObjectMapper mapper;
 
     public String getUsername(String token) {
@@ -57,7 +54,14 @@ public class JwtService {
         return StringUtils.hasText(token) && token.startsWith(BEARER) ? token.substring(BEARER.length()) : token;
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public boolean isValidToken(String jwtToken) {
+        if (nonNull(jwtToken) && !jwtToken.isBlank()) {
+            return validJwt(parseToken(jwtToken));
+        }
+        return false;
+    }
+
+    public boolean validJwt(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
@@ -73,9 +77,5 @@ public class JwtService {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
-    }
-
-    public Long getJwtExpirationTimeInMs() {
-        return jwtExpirationTimeInMs;
     }
 }
