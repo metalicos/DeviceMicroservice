@@ -1,5 +1,6 @@
 package com.cyberdone.DeviceMicroservice.persistence.service;
 
+import com.cyberdone.DeviceMicroservice.exception.AlreadyExistException;
 import com.cyberdone.DeviceMicroservice.exception.NotFoundException;
 import com.cyberdone.DeviceMicroservice.model.dto.DeviceMetadataDto;
 import com.cyberdone.DeviceMicroservice.persistence.entity.DeviceMetadata;
@@ -15,6 +16,15 @@ import javax.transaction.Transactional;
 public class DeviceMetadataService {
     private final ModelMapper modelMapper;
     private final DeviceMetadataRepository deviceMetadataRepository;
+
+    @Transactional
+    public DeviceMetadataDto saveMetadata(DeviceMetadataDto dto) {
+        if (!deviceMetadataRepository.existsByUuid(dto.getUuid())) {
+            var saved = deviceMetadataRepository.save(modelMapper.map(dto, DeviceMetadata.class));
+            return modelMapper.map(deviceMetadataRepository.save(saved), DeviceMetadataDto.class);
+        }
+        throw new AlreadyExistException("Device already exists. chose another UUID.");
+    }
 
     @Transactional
     public DeviceMetadataDto updateMetadata(String uuid, String name, String description) {
@@ -37,5 +47,19 @@ public class DeviceMetadataService {
     @Transactional
     public void deleteMetadata(String uuid) {
         deviceMetadataRepository.deleteByUuid(uuid);
+    }
+
+    @Transactional
+    public void unlinkMetadataFromUser(String uuid) {
+        if (deviceMetadataRepository.existsByUuid(uuid)) {
+            deviceMetadataRepository.unlinkDeviceMetadataFromUser(uuid);
+        }
+    }
+
+    @Transactional
+    public void linkMetadataToUser(String uuid, long userId) {
+        if (deviceMetadataRepository.existsByUuid(uuid)) {
+            deviceMetadataRepository.linkDeviceMetadataToUser(uuid, userId);
+        }
     }
 }

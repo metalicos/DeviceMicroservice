@@ -4,7 +4,6 @@ import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.Hy
 import com.cyberdone.DeviceMicroservice.persistence.service.HydroponicDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ public class HydroponicDataController {
     private final HydroponicDataService hydroponicDataService;
 
     @GetMapping("/last")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<List<HydroponicDataDto>> getLastDataInDeviceWithUUID(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -42,7 +40,6 @@ public class HydroponicDataController {
     }
 
     @DeleteMapping
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<Void> deleteAllDataInDeviceWithUUID(
             @NotNull(message = VALUE_IS_NULL_MSG) @Positive(message = NOT_POSITIVE_MSG)
             @RequestParam Long id) {

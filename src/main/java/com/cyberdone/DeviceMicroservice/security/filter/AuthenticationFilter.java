@@ -1,7 +1,7 @@
 package com.cyberdone.DeviceMicroservice.security.filter;
 
-import com.cyberdone.DeviceMicroservice.security.JwtService;
 import com.cyberdone.DeviceMicroservice.model.dto.security.Role;
+import com.cyberdone.DeviceMicroservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import static java.util.Objects.nonNull;
 
 @Slf4j
 @RequiredArgsConstructor

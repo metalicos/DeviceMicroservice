@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
 import java.util.function.Function;
 
 import static java.util.Objects.nonNull;
@@ -27,11 +26,9 @@ import static java.util.Objects.nonNull;
 public class JwtService {
 
     public static final String BEARER = "Bearer ";
-
+    private final ObjectMapper mapper;
     @Value("${security.jwt-secret}")
     private String jwtSecret;
-
-    private final ObjectMapper mapper;
 
     public String getUsername(String token) {
         return extractClaim(token, Claims::getSubject);
