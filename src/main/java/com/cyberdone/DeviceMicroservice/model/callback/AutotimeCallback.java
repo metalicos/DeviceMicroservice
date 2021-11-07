@@ -1,7 +1,7 @@
 package com.cyberdone.DeviceMicroservice.model.callback;
 
 import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicTimeDto;
-import com.cyberdone.DeviceMicroservice.model.service.EncDecService;
+import com.cyberdone.DeviceMicroservice.service.EncDecService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.encode;
+import static com.cyberdone.DeviceMicroservice.util.MqttVariableEncoderDecoderUtils.encode;
 
 
 @Slf4j
@@ -40,7 +40,6 @@ public class AutotimeCallback implements Callback {
     }
 
     private void keepInTime(MqttClient client, HydroponicTimeDto hydroponicTimeDto) throws ParseException {
-        log.info("{}", hydroponicTimeDto);
         var hydroponicTime = hydroponicTimeDto.getMicrocontrollerTime();
         var timeZone = hydroponicTimeDto.getMicrocontrollerTimeZone();
         var currentTimeForItsTimezone = LocalDateTime.now(ZoneId.of(timeZone));

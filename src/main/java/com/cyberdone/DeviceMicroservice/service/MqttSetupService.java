@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.service;
+package com.cyberdone.DeviceMicroservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.MqttClient;

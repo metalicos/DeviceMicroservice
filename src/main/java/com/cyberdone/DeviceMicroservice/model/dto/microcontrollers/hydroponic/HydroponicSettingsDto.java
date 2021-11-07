@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 public class HydroponicSettingsDto {
     private String uuid;
     private Double mlPerMillisecond;
-    private Double regulateErrorPhUp;
-    private Double regulateErrorPhDown;
+    private Double regulateErrorPh;
     private Double regulateErrorFertilizer;
     private Double phUpDoseMl;
     private Double phDownDoseMl;
@@ -23,7 +22,7 @@ public class HydroponicSettingsDto {
     private Long setupTdsValue;
     private Double setupTemperatureValue;
     private Boolean deviceEnable;
-    private Boolean DispensersEnable;
+    private Boolean dispensersEnable;
     private Boolean sensorsEnable;
     private Long restartCounter;
     private String wifiSSID;

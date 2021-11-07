@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.service;
+package com.cyberdone.DeviceMicroservice.service;
 
 import com.cyberdone.DeviceMicroservice.persistence.entity.ValueType;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.encode;
-import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.encodeConsideringToValueType;
 import static com.cyberdone.DeviceMicroservice.persistence.entity.ValueType.NONE;
 import static com.cyberdone.DeviceMicroservice.persistence.entity.ValueType.TIME;
 import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.AUTOTIME;
@@ -22,6 +20,8 @@ import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTo
 import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.UPDATE_TIME;
 import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.WIFI_PASS;
 import static com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum.WIFI_SSID;
+import static com.cyberdone.DeviceMicroservice.util.MqttVariableEncoderDecoderUtils.encode;
+import static com.cyberdone.DeviceMicroservice.util.MqttVariableEncoderDecoderUtils.encodeConsideringToValueType;
 
 @Slf4j
 public abstract class AbstractOperationService {

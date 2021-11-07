@@ -1,6 +1,6 @@
 package com.cyberdone.DeviceMicroservice;
 
-import com.cyberdone.DeviceMicroservice.model.service.MqttService;
+import com.cyberdone.DeviceMicroservice.service.MqttService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

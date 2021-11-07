@@ -18,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 import static com.cyberdone.DeviceMicroservice.validation.ValidationConstants.NOT_POSITIVE_MSG;
 import static com.cyberdone.DeviceMicroservice.validation.ValidationConstants.UUID_FAILED_MSG;
@@ -37,6 +38,13 @@ public class MetadataController {
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid) {
         return ResponseEntity.ok(metadataService.getMetadataByUuid(uuid));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<DeviceMetadataDto>> getMetadataByUser(
+            @NotNull(message = VALUE_IS_NULL_MSG) @Positive(message = NOT_POSITIVE_MSG)
+            @RequestParam Long userId) {
+        return ResponseEntity.ok(metadataService.getMetadataByUser(userId));
     }
 
     @PostMapping

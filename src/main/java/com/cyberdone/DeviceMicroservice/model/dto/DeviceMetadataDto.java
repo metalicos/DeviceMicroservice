@@ -30,4 +30,7 @@ public class DeviceMetadataDto {
     private DeviceType deviceType;
     @NotNull(message = VALUE_IS_NULL_MSG)
     private Boolean accessEnabled;
+    @Digits(message = VALUE_NOT_NUMBER_MSG, integer = Integer.MAX_VALUE, fraction = 10)
+    @NotNull(message = VALUE_IS_NULL_MSG)
+    private Long userId;
 }

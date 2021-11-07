@@ -1,11 +1,10 @@
 package com.cyberdone.DeviceMicroservice.controller.hydroponic;
 
 import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicTimeDto;
-import com.cyberdone.DeviceMicroservice.model.service.HydroponicOneOperationService;
+import com.cyberdone.DeviceMicroservice.service.HydroponicOneOperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,14 +68,14 @@ public class HydroponicUpdateController {
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping("/pumps/phUp/{direction}")
+    @PostMapping("/pumps/phUp")
     public ResponseEntity<String> updatePhUpPumpStatus(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = DIRECTION_PATTERN, message = DIRECTION_FAILED_MSG)
-            @PathVariable String direction) {
-        log.info("Pump Ph Up; direction={} uuid={}", direction, uuid);
-        switch (direction) {
+            @RequestParam String value) {
+        log.info("Pump Ph Up; direction={} uuid={}", value, uuid);
+        switch (value) {
             case "-1" -> operationService.phUpPump(uuid, LEFT, DIRECTION);
             case "0" -> operationService.phUpPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.phUpPump(uuid, RIGHT, DIRECTION);
@@ -84,14 +83,14 @@ public class HydroponicUpdateController {
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping("/pumps/phDown/{direction}")
+    @PostMapping("/pumps/phDown")
     public ResponseEntity<String> updatePhDownPumpStatus(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = DIRECTION_PATTERN, message = DIRECTION_FAILED_MSG)
-            @PathVariable String direction) {
-        log.info("Pump Ph Down; direction={} uuid={}", direction, uuid);
-        switch (direction) {
+            @RequestParam String value) {
+        log.info("Pump Ph Down; direction={} uuid={}", value, uuid);
+        switch (value) {
             case "-1" -> operationService.phDownPump(uuid, LEFT, DIRECTION);
             case "0" -> operationService.phDownPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.phDownPump(uuid, RIGHT, DIRECTION);
@@ -99,14 +98,14 @@ public class HydroponicUpdateController {
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping("/pumps/tds/{direction}")
+    @PostMapping("/pumps/tds")
     public ResponseEntity<String> updateTdsPumpStatus(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = DIRECTION_PATTERN, message = DIRECTION_FAILED_MSG)
-            @PathVariable String direction) {
-        log.info("Pump Tds; direction={} uuid={}", direction, uuid);
-        switch (direction) {
+            @RequestParam String value) {
+        log.info("Pump Tds; direction={} uuid={}", value, uuid);
+        switch (value) {
             case "-1" -> operationService.tdsPump(uuid, LEFT, DIRECTION);
             case "0" -> operationService.tdsPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.tdsPump(uuid, RIGHT, DIRECTION);

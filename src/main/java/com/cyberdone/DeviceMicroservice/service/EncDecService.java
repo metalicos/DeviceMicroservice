@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.service;
+package com.cyberdone.DeviceMicroservice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;

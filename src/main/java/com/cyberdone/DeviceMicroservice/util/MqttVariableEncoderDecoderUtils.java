@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.util;
+package com.cyberdone.DeviceMicroservice.util;
 
 import com.cyberdone.DeviceMicroservice.persistence.entity.ValueType;
 import lombok.experimental.UtilityClass;

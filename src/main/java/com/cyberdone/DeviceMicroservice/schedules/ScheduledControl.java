@@ -1,8 +1,8 @@
-package com.cyberdone.DeviceMicroservice.model.schedules;
+package com.cyberdone.DeviceMicroservice.schedules;
 
 import com.cyberdone.DeviceMicroservice.model.dto.RegularScheduleDto;
-import com.cyberdone.DeviceMicroservice.model.service.WebRelayOperationService;
 import com.cyberdone.DeviceMicroservice.persistence.service.RegularScheduleService;
+import com.cyberdone.DeviceMicroservice.service.WebRelayOperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

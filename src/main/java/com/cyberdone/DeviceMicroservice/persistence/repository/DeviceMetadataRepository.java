@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DeviceMetadataRepository extends JpaRepository<DeviceMetadata, Long> {
@@ -17,6 +18,8 @@ public interface DeviceMetadataRepository extends JpaRepository<DeviceMetadata, 
     boolean isEnabled(@Param("uuid") String uuid);
 
     void deleteByUuid(String uuid);
+
+    List<DeviceMetadata> findAllByUserId(Long userId);
 
     @Modifying
     @Query("update DeviceMetadata m set m.userId = :userId where m.uuid = :uuid")

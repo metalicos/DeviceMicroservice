@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.service;
+package com.cyberdone.DeviceMicroservice.service;
 
 import com.cyberdone.DeviceMicroservice.model.callback.Callback;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Timer;
@@ -38,7 +37,6 @@ public class MqttService implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) {
         callbacks.get(topic).execute(client, Optional.ofNullable(message)
                 .orElseThrow(() -> new IllegalStateException("Argument: MqttMessage is not valid")));
-        log.info("{}", new Date());
     }
 
     @Override

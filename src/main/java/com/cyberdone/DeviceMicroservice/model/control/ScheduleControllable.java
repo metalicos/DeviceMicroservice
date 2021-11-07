@@ -1,8 +1,8 @@
 package com.cyberdone.DeviceMicroservice.model.control;
 
-import com.cyberdone.DeviceMicroservice.model.service.AbstractOperationService;
 import com.cyberdone.DeviceMicroservice.persistence.entity.ValueType;
 import com.cyberdone.DeviceMicroservice.persistence.entity.topic.CommonTopicEnum;
+import com.cyberdone.DeviceMicroservice.service.AbstractOperationService;
 import org.slf4j.Logger;
 
 public interface ScheduleControllable {

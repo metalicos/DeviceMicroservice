@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,12 @@ public class DeviceMetadataService {
     public DeviceMetadataDto getMetadataByUuid(String uuid) {
         return modelMapper.map(
                 deviceMetadataRepository.findByUuid(uuid).orElse(new DeviceMetadata()), DeviceMetadataDto.class);
+    }
+
+    public List<DeviceMetadataDto> getMetadataByUser(Long userId) {
+        return deviceMetadataRepository.findAllByUserId(userId).stream()
+                .map(metadata -> modelMapper.map(metadata, DeviceMetadataDto.class))
+                .collect(Collectors.toList());
     }
 
     @Transactional
