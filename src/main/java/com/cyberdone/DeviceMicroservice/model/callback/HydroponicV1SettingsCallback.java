@@ -25,7 +25,7 @@ import java.io.UncheckedIOException;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service("hydroponic-v1")
+@Service("device-microservice/hydroponic-v1")
 public class HydroponicV1SettingsCallback implements Callback {
     private final HydroponicDataService hydroponicDataService;
     private final HydroponicSettingsService hydroponicSettingsService;
@@ -40,6 +40,7 @@ public class HydroponicV1SettingsCallback implements Callback {
     @Transactional
     public void execute(MqttClient client, MqttMessage message) {
         var decryptedData = encDecService.decrypt(new String(message.getPayload()));
+        log.info("Response received");
         try {
             var allData = mapper.readValue(decryptedData, HydroponicAllDataDto.class);
             hydroponicDataService.saveData(modelMapper.map(allData, HydroponicData.class));
