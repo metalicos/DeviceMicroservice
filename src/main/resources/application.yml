@@ -23,6 +23,10 @@ spring:
 security:
   aes-key: -1, -2, -3, 100, 100, -88, 100, -95, 100, -69, 95, 48, 77, -78, 100, 62
   jwt-secret: d2980f58-3d82-4144-b802-406f4b47930b-5784cca4-0b50-425e-ac6c-bd651e0c788d
+  callback:
+    show-decrypted-message:
+      hydroponic-v1-settings: false
+      autotime: false
 mqtt:
   username: user
   password: Qwerty123

@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.callback;
+package com.cyberdone.DeviceMicroservice.callback;
 
 import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicTimeDto;
 import com.cyberdone.DeviceMicroservice.service.EncDecService;
@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -25,6 +26,8 @@ import static com.cyberdone.DeviceMicroservice.util.MqttVariableEncoderDecoderUt
 @RequiredArgsConstructor
 public class AutotimeCallback implements Callback {
     public static final int DATE_MISMATCH_ERROR_SECONDS = 5;
+    @Value("${security.callback.show-decrypted-message.autotime}")
+    private boolean showDecryptedMessage;
     private final ObjectMapper objectMapper;
     private final EncDecService encDecService;
 
@@ -32,6 +35,9 @@ public class AutotimeCallback implements Callback {
     @SneakyThrows
     public void execute(MqttClient client, MqttMessage message) {
         var decryptedData = encDecService.decrypt(new String(message.getPayload()));
+        if (showDecryptedMessage) {
+            log.info("{}", decryptedData);
+        }
         try {
             keepInTime(client, objectMapper.readValue(decryptedData, HydroponicTimeDto.class));
         } catch (JsonProcessingException | ParseException ex) {

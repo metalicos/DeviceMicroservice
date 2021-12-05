@@ -33,7 +33,7 @@ public class ScheduledControl {
 
     @Scheduled(fixedRate = 500)
     private void uploadLastDataToProcess() {
-        DayOfWeek day = LocalDateTime.now().getDayOfWeek();
+        var day = LocalDateTime.now().getDayOfWeek();
         schedules = regularScheduleService.getAllSchedulesWithDays(
                         MONDAY.equals(day), TUESDAY.equals(day), WEDNESDAY.equals(day),
                         THURSDAY.equals(day), FRIDAY.equals(day), SATURDAY.equals(day),

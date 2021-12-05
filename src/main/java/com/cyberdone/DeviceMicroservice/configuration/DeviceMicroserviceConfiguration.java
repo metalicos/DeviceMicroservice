@@ -18,7 +18,7 @@ public class DeviceMicroserviceConfiguration {
 
     @Bean
     public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
+        var modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setImplicitMappingEnabled(true)

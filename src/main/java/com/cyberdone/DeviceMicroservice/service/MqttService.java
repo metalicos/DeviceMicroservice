@@ -1,6 +1,6 @@
 package com.cyberdone.DeviceMicroservice.service;
 
-import com.cyberdone.DeviceMicroservice.model.callback.Callback;
+import com.cyberdone.DeviceMicroservice.callback.Callback;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -29,8 +29,7 @@ public class MqttService implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable cause) {
-        restartIfNotConnected();
-        log.error("Connection is lost. Time:{} Cause:{}", LocalDateTime.now(), cause);
+        // not needed for implementation
     }
 
     @Override
@@ -51,6 +50,7 @@ public class MqttService implements MqttCallback {
             for (String topic : callbacks.keySet()) {
                 client.subscribe(topic, 2);
             }
+            log.error("Connection started... Time:{}", LocalDateTime.now());
         } catch (MqttException e) {
             log.error("Mqtt connect failed {}", e.getMessage());
         }
@@ -64,6 +64,7 @@ public class MqttService implements MqttCallback {
         try {
             if (nonNull(client)) {
                 client.disconnectForcibly();
+                log.error("Connection stopped... Time:{}", LocalDateTime.now());
             }
         } catch (MqttException e) {
             log.error("Mqtt disconnect failed {}", e.getMessage());
@@ -73,6 +74,7 @@ public class MqttService implements MqttCallback {
     public void restartIfNotConnected() {
         try {
             if (isNull(client) || !client.isConnected()) {
+                log.error("Connection is lost. Reconnecting... Time:{}", LocalDateTime.now());
                 stop();
                 start();
             }
@@ -88,6 +90,6 @@ public class MqttService implements MqttCallback {
             public void run() {
                 restartIfNotConnected();
             }
-        }, 1_000, 1_000);
+        }, 0, 5_000);
     }
 }

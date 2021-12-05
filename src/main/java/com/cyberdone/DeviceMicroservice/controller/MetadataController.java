@@ -6,14 +6,9 @@ import com.cyberdone.DeviceMicroservice.persistence.service.DeviceMetadataServic
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -47,7 +42,7 @@ public class MetadataController {
         return ResponseEntity.ok(metadataService.getMetadataByUser(userId));
     }
 
-    @PostMapping
+    @PatchMapping
     public ResponseEntity<String> updateMetadata(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -57,6 +52,13 @@ public class MetadataController {
             @RequestParam String description) {
         log.info("{} {} {}", uuid, name, description);
         metadataService.updateMetadata(uuid, name, description);
+        return ResponseEntity.ok("OK");
+    }
+
+    @PostMapping
+    public ResponseEntity<String> createMetadata(@RequestBody @Valid DeviceMetadataDto metadataDto) {
+        log.info("Creating Device with Metadata: {}", metadataDto);
+        metadataService.saveMetadata(metadataDto);
         return ResponseEntity.ok("OK");
     }
 
