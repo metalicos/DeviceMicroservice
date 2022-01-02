@@ -6,6 +6,7 @@ import com.cyberdone.DeviceMicroservice.persistence.service.DeviceMetadataServic
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,6 +57,7 @@ public class MetadataController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('w_all','w_device_metadata')")
     public ResponseEntity<String> createMetadata(@RequestBody @Valid DeviceMetadataDto metadataDto) {
         log.info("Creating Device with Metadata: {}", metadataDto);
         metadataService.saveMetadata(metadataDto);

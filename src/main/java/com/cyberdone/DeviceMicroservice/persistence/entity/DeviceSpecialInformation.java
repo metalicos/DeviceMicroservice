@@ -26,18 +26,19 @@ import java.util.Objects;
 @NoArgsConstructor
 @Table(name = "DEVICE_SPECIAL_INFORMATION")
 public class DeviceSpecialInformation {
-    public Integer wifiRssi;
-    public String wifiBsid;
-    public String localIp;
-    public String subnetMask;
-    public String gatewayIP;
-    public String macAddr;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String uuid;
     private String wifiSSID;
     private String wifiPASS;
+
+    public Integer wifiRssi;
+    public String wifiBsid;
+    public String localIp;
+    public String subnetMask;
+    public String gatewayIP;
+    public String macAddr;
 
     @CreationTimestamp
     private LocalDateTime receiveTime;

@@ -23,6 +23,6 @@ public class DeviceMicroserviceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        mqttService.run();
+        mqttService.start();
     }
 }

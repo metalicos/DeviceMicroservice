@@ -25,7 +25,6 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "REGULAR_SCHEDULES")
-
 public class RegularSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

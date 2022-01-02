@@ -76,8 +76,8 @@ public class HydroponicUpdateController {
             @RequestParam String value) {
         log.info("Pump Ph Up; direction={} uuid={}", value, uuid);
         switch (value) {
-            case "-1" -> operationService.phUpPump(uuid, LEFT, DIRECTION);
-            case "0" -> operationService.phUpPump(uuid, STOP, DIRECTION);
+            case "0" -> operationService.phUpPump(uuid, LEFT, DIRECTION);
+            case "2" -> operationService.phUpPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.phUpPump(uuid, RIGHT, DIRECTION);
         }
         return ResponseEntity.ok("OK");
@@ -91,8 +91,8 @@ public class HydroponicUpdateController {
             @RequestParam String value) {
         log.info("Pump Ph Down; direction={} uuid={}", value, uuid);
         switch (value) {
-            case "-1" -> operationService.phDownPump(uuid, LEFT, DIRECTION);
-            case "0" -> operationService.phDownPump(uuid, STOP, DIRECTION);
+            case "0" -> operationService.phDownPump(uuid, LEFT, DIRECTION);
+            case "2" -> operationService.phDownPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.phDownPump(uuid, RIGHT, DIRECTION);
         }
         return ResponseEntity.ok("OK");
@@ -106,8 +106,8 @@ public class HydroponicUpdateController {
             @RequestParam String value) {
         log.info("Pump Tds; direction={} uuid={}", value, uuid);
         switch (value) {
-            case "-1" -> operationService.tdsPump(uuid, LEFT, DIRECTION);
-            case "0" -> operationService.tdsPump(uuid, STOP, DIRECTION);
+            case "0" -> operationService.tdsPump(uuid, LEFT, DIRECTION);
+            case "2" -> operationService.tdsPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.tdsPump(uuid, RIGHT, DIRECTION);
         }
         return ResponseEntity.ok("OK");

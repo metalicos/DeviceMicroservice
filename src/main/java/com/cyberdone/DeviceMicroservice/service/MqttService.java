@@ -50,46 +50,25 @@ public class MqttService implements MqttCallback {
             for (String topic : callbacks.keySet()) {
                 client.subscribe(topic, 2);
             }
-            log.error("Connection started... Time:{}", LocalDateTime.now());
+            log.info("Connection started... Time:{}", LocalDateTime.now());
         } catch (MqttException e) {
             log.error("Mqtt connect failed {}", e.getMessage());
+            stop();
         }
-    }
-
-    public void sendData(String topic, byte[] data, int qos, boolean retained) throws MqttException {
-        client.publish(topic, data, qos, retained);
     }
 
     public void stop() {
         try {
             if (nonNull(client)) {
                 client.disconnectForcibly();
-                log.error("Connection stopped... Time:{}", LocalDateTime.now());
+                log.info("Connection stopped... Time:{}", LocalDateTime.now());
             }
         } catch (MqttException e) {
             log.error("Mqtt disconnect failed {}", e.getMessage());
         }
     }
 
-    public void restartIfNotConnected() {
-        try {
-            if (isNull(client) || !client.isConnected()) {
-                log.error("Connection is lost. Reconnecting... Time:{}", LocalDateTime.now());
-                stop();
-                start();
-            }
-        } catch (Exception ex) {
-            log.error("Reconnect failed. {}", ex.getMessage());
-        }
-    }
-
-    public void run() {
-        start();
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                restartIfNotConnected();
-            }
-        }, 0, 5_000);
+    public void sendData(String topic, byte[] data, int qos, boolean retained) throws MqttException {
+        client.publish(topic, data, qos, retained);
     }
 }

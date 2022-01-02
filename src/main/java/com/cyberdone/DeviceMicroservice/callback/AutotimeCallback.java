@@ -25,7 +25,7 @@ import static com.cyberdone.DeviceMicroservice.util.MqttVariableEncoderDecoderUt
 @Service("device-microservice/autotime")
 @RequiredArgsConstructor
 public class AutotimeCallback implements Callback {
-    public static final int DATE_MISMATCH_ERROR_SECONDS = 5;
+    public static final int DATE_MISMATCH_ERROR_SECONDS = 3;
     @Value("${security.callback.show-decrypted-message.autotime}")
     private boolean showDecryptedMessage;
     private final ObjectMapper objectMapper;
