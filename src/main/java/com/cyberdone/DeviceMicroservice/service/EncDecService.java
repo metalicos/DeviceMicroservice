@@ -52,5 +52,4 @@ public class EncDecService {
         cipher.init(Cipher.DECRYPT_MODE, key);
         return cipher.doFinal(decodedCipherText);
     }
-
 }
