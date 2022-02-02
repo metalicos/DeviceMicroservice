@@ -38,6 +38,7 @@ public class DeviceMetadata {
     @Enumerated(value = EnumType.STRING)
     private DeviceType deviceType;
     private Boolean accessEnabled;
+    private Long userId;
 
     @Override
     public boolean equals(Object o) {

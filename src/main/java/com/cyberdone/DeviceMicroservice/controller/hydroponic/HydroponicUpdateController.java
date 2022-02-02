@@ -1,12 +1,10 @@
 package com.cyberdone.DeviceMicroservice.controller.hydroponic;
 
-import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.HydroponicTimeDto;
-import com.cyberdone.DeviceMicroservice.model.service.HydroponicOneOperationService;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicTimeDto;
+import com.cyberdone.DeviceMicroservice.service.HydroponicOneOperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,14 +43,12 @@ public class HydroponicUpdateController {
     private final HydroponicOneOperationService operationService;
 
     @PostMapping("/time")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateTime(@Valid @RequestBody HydroponicTimeDto dto) {
         operationService.updateTime(dto.getUuid(), dto.getMicrocontrollerTime());
         return ResponseEntity.ok("OK");
     }
 
     @PostMapping("/zone")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateZone(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -63,7 +59,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/autotime")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateTime(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -73,56 +68,52 @@ public class HydroponicUpdateController {
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping("/pumps/phUp/{direction}")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
+    @PostMapping("/pumps/phUp")
     public ResponseEntity<String> updatePhUpPumpStatus(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = DIRECTION_PATTERN, message = DIRECTION_FAILED_MSG)
-            @PathVariable String direction) {
-        log.info("Pump Ph Up; direction={} uuid={}", direction, uuid);
-        switch (direction) {
-            case "-1" -> operationService.phUpPump(uuid, LEFT, DIRECTION);
-            case "0" -> operationService.phUpPump(uuid, STOP, DIRECTION);
+            @RequestParam String value) {
+        log.info("Pump Ph Up; direction={} uuid={}", value, uuid);
+        switch (value) {
+            case "0" -> operationService.phUpPump(uuid, LEFT, DIRECTION);
+            case "2" -> operationService.phUpPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.phUpPump(uuid, RIGHT, DIRECTION);
         }
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping("/pumps/phDown/{direction}")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
+    @PostMapping("/pumps/phDown")
     public ResponseEntity<String> updatePhDownPumpStatus(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = DIRECTION_PATTERN, message = DIRECTION_FAILED_MSG)
-            @PathVariable String direction) {
-        log.info("Pump Ph Down; direction={} uuid={}", direction, uuid);
-        switch (direction) {
-            case "-1" -> operationService.phDownPump(uuid, LEFT, DIRECTION);
-            case "0" -> operationService.phDownPump(uuid, STOP, DIRECTION);
+            @RequestParam String value) {
+        log.info("Pump Ph Down; direction={} uuid={}", value, uuid);
+        switch (value) {
+            case "0" -> operationService.phDownPump(uuid, LEFT, DIRECTION);
+            case "2" -> operationService.phDownPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.phDownPump(uuid, RIGHT, DIRECTION);
         }
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping("/pumps/tds/{direction}")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
+    @PostMapping("/pumps/tds")
     public ResponseEntity<String> updateTdsPumpStatus(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = DIRECTION_PATTERN, message = DIRECTION_FAILED_MSG)
-            @PathVariable String direction) {
-        log.info("Pump Tds; direction={} uuid={}", direction, uuid);
-        switch (direction) {
-            case "-1" -> operationService.tdsPump(uuid, LEFT, DIRECTION);
-            case "0" -> operationService.tdsPump(uuid, STOP, DIRECTION);
+            @RequestParam String value) {
+        log.info("Pump Tds; direction={} uuid={}", value, uuid);
+        switch (value) {
+            case "0" -> operationService.tdsPump(uuid, LEFT, DIRECTION);
+            case "2" -> operationService.tdsPump(uuid, STOP, DIRECTION);
             case "1" -> operationService.tdsPump(uuid, RIGHT, DIRECTION);
         }
         return ResponseEntity.ok("OK");
     }
 
     @PostMapping("/restart")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> restart(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid) {
@@ -132,7 +123,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/save")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> saveAllSettings(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid) {
@@ -142,7 +132,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/read")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> readAllSettings(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid) {
@@ -152,7 +141,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/calibrate/tds")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> calibrateTdsSensor(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -173,7 +161,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/calibrate/ph/low")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> calibratePhLow(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -185,7 +172,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/calibrate/ph/high")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> calibratePhHigh(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -197,7 +183,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/calibrate/ph/clear")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> clrCalibrationPhSensor(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid) {
@@ -207,7 +192,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/setup/ph")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateSetupPhValue(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -219,7 +203,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/setup/tds")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateSetupTdsValue(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -231,7 +214,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/dispensers/recheck-time")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateRecheckDispensersAfterTime(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -243,7 +225,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/dose/ph/up")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updatePhUpDose(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -255,7 +236,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/dose/ph/down")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updatePhDownDose(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -267,7 +247,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/dose/tds")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateFertilizerDose(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -279,7 +258,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/regulator/error/ph")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateRegulatePhError(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -291,7 +269,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/regulator/error/tds")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateRegulateTdsError(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -303,7 +280,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/pump/speed")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updatePumpSpeed(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -315,7 +291,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/wifi/ssid")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateWifiSsid(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -327,7 +302,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/wifi/pass")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateWifiPassword(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -339,7 +313,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/enable/sensors")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateSensorsEnable(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,
@@ -351,7 +324,6 @@ public class HydroponicUpdateController {
     }
 
     @PostMapping("/enable/dispensers")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.100:4200"})
     public ResponseEntity<String> updateDispensersEnable(
             @NotBlank(message = VALUE_IS_BLANK_MSG) @Pattern(regexp = UUID_PATTERN, message = UUID_FAILED_MSG)
             @RequestParam String uuid,

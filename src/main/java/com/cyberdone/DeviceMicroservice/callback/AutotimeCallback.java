@@ -1,7 +1,7 @@
-package com.cyberdone.DeviceMicroservice.model.callback;
+package com.cyberdone.DeviceMicroservice.callback;
 
-import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.HydroponicTimeDto;
-import com.cyberdone.DeviceMicroservice.model.service.EncDecService;
+import com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic.HydroponicTimeDto;
+import com.cyberdone.DeviceMicroservice.service.EncDecService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -17,14 +18,16 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static com.cyberdone.DeviceMicroservice.model.util.MqttVariableEncoderDecoderUtils.encode;
+import static com.cyberdone.DeviceMicroservice.util.MqttVariableEncoderDecoderUtils.encode;
 
 
 @Slf4j
 @Service("device-microservice/autotime")
 @RequiredArgsConstructor
 public class AutotimeCallback implements Callback {
-    public static final int DATE_MISMATCH_ERROR_SECONDS = 5;
+    public static final int DATE_MISMATCH_ERROR_SECONDS = 3;
+    @Value("${security.callback.show-decrypted-message.autotime}")
+    private boolean showDecryptedMessage;
     private final ObjectMapper objectMapper;
     private final EncDecService encDecService;
 
@@ -32,6 +35,9 @@ public class AutotimeCallback implements Callback {
     @SneakyThrows
     public void execute(MqttClient client, MqttMessage message) {
         var decryptedData = encDecService.decrypt(new String(message.getPayload()));
+        if (showDecryptedMessage) {
+            log.info("{}", decryptedData);
+        }
         try {
             keepInTime(client, objectMapper.readValue(decryptedData, HydroponicTimeDto.class));
         } catch (JsonProcessingException | ParseException ex) {
@@ -40,7 +46,6 @@ public class AutotimeCallback implements Callback {
     }
 
     private void keepInTime(MqttClient client, HydroponicTimeDto hydroponicTimeDto) throws ParseException {
-        log.info("{}", hydroponicTimeDto);
         var hydroponicTime = hydroponicTimeDto.getMicrocontrollerTime();
         var timeZone = hydroponicTimeDto.getMicrocontrollerTimeZone();
         var currentTimeForItsTimezone = LocalDateTime.now(ZoneId.of(timeZone));

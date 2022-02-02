@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.configuration;
+package com.cyberdone.DeviceMicroservice.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class HydroponicServiceConfiguration {
+public class DeviceMicroserviceConfiguration {
 
     @Bean
     public ObjectMapper getObjectMapper() {
@@ -18,7 +18,7 @@ public class HydroponicServiceConfiguration {
 
     @Bean
     public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
+        var modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setImplicitMappingEnabled(true)

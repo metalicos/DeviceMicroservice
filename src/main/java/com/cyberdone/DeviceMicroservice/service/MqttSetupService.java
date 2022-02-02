@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.service;
+package com.cyberdone.DeviceMicroservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -7,6 +7,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class MqttSetupService {
     private Integer mqttMaxInFlightMessages;
 
     public MqttClient createMqttClient() throws MqttException {
-        return new MqttClient(mqttClientUrl, mqttClientName, new MemoryPersistence());
+        return new MqttClient(mqttClientUrl, mqttClientName + UUID.randomUUID(), new MemoryPersistence());
     }
 
     public MqttConnectOptions createConnectionOptions() {

@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.dto;
+package com.cyberdone.DeviceMicroservice.model.dto.microcontrollers.hydroponic;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

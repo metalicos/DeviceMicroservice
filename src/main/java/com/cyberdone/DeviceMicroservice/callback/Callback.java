@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.callback;
+package com.cyberdone.DeviceMicroservice.callback;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;

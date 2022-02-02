@@ -1,4 +1,4 @@
-package com.cyberdone.DeviceMicroservice.model.service;
+package com.cyberdone.DeviceMicroservice.service;
 
 
 import com.cyberdone.DeviceMicroservice.persistence.entity.ValueType;
